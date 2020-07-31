@@ -3,24 +3,117 @@
 
 var List = require("bs-platform/lib/js/list.js");
 var $$Array = require("bs-platform/lib/js/array.js");
-var ConfigJs = require("./config.js");
+var Belt_Option = require("bs-platform/lib/js/belt_Option.js");
 
-var config = ConfigJs.default;
+function loadModule(path) {
+  return require(path).default;
+}
 
-var projects = $$Array.to_list(config.projects);
-
-function projectConfig(projectSlug) {
+function projectConfig(projectSlug, configPath) {
+  var path = Belt_Option.getWithDefault(configPath, process.env.HOME + "/.branch-name");
+  var config = require(path).default;
+  var projects = $$Array.to_list(config.projects);
   try {
-    return List.find((function (p) {
-                  return p.slug === projectSlug;
-                }), projects);
+    return {
+            TAG: /* Ok */0,
+            _0: List.find((function (p) {
+                    return p.slug === projectSlug;
+                  }), projects)
+          };
   }
   catch (exn){
-    return ;
+    return {
+            TAG: /* Error */1,
+            _0: "unknown project " + projectSlug
+          };
   }
 }
 
-exports.config = config;
-exports.projects = projects;
+function server(projectConfig) {
+  var match = projectConfig.server;
+  switch (match) {
+    case "clubhouse" :
+        var authToken = projectConfig.serverConfig.authToken;
+        if (authToken !== undefined) {
+          return {
+                  TAG: /* Ok */0,
+                  _0: {
+                    TAG: /* Clubhouse */0,
+                    _0: authToken
+                  }
+                };
+        } else {
+          return {
+                  TAG: /* Error */1,
+                  _0: "server config missing authToken value"
+                };
+        }
+    case "jira" :
+        var match$1 = projectConfig.serverConfig;
+        var password = match$1.password;
+        var username = match$1.username;
+        var host = match$1.host;
+        if (host !== undefined) {
+          if (username !== undefined) {
+            if (password !== undefined) {
+              return {
+                      TAG: /* Ok */0,
+                      _0: {
+                        TAG: /* Jira */1,
+                        _0: host,
+                        _1: username,
+                        _2: password
+                      }
+                    };
+            } else {
+              return {
+                      TAG: /* Error */1,
+                      _0: "server config missing password value"
+                    };
+            }
+          } else if (password !== undefined) {
+            return {
+                    TAG: /* Error */1,
+                    _0: "server config missing username value"
+                  };
+          } else {
+            return {
+                    TAG: /* Error */1,
+                    _0: "server config missing username and password values"
+                  };
+          }
+        } else if (username !== undefined) {
+          if (password !== undefined) {
+            return {
+                    TAG: /* Error */1,
+                    _0: "server config missing host value"
+                  };
+          } else {
+            return {
+                    TAG: /* Error */1,
+                    _0: "server config missing host and password values"
+                  };
+          }
+        } else if (password !== undefined) {
+          return {
+                  TAG: /* Error */1,
+                  _0: "server config missing host and password values"
+                };
+        } else {
+          return {
+                  TAG: /* Error */1,
+                  _0: "server config missing host, username and password values"
+                };
+        }
+    default:
+      return {
+              TAG: /* Error */1,
+              _0: "unsupported server type"
+            };
+  }
+}
+
+exports.loadModule = loadModule;
 exports.projectConfig = projectConfig;
-/* config Not a pure module */
+exports.server = server;
+/* No side effect */

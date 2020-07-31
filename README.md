@@ -1,24 +1,87 @@
-# Basic Reason Template
+# branch-name
 
-Hello! This project allows you to quickly get started with Reason and BuckleScript. If you wanted a more sophisticated version, try the `react` template (`bsb -theme react -init .`).
+A cli tool to generate well formatted pr name from your favorite issue trackers. So far Jira and Clubhouse are supported.
 
-# Build
 
-```bash
-# for yarn
-yarn build
+## Installation ##
 
-# for npm
-npm run build
+```shell
+$ yarn global add @farmisen/branch-name
+
 ```
 
-# Build + Watch
+## Usage ##
 
-```bash
-# for yarn
-yarn start
+```
+branch-name [options]
 
-# for npm
-npm run start
+  Options:
+
+    -p, --project  project defined in the config file
+    -i, --id       issue identifier
+    -c, --config   Config file location (default to $HOME/.branch-name)
+    -h, --help     Output usage information
+    -d, --doc      Output full documentation
 ```
 
+## Examples ##
+```
+~/P/f/branch-name > branch-name --project coffee-bot --id 17382 
+farmisen/ch17382/fix-filter-cleanup-cron-table
+
+~/P/f/branch-name > branch-name --project simu- --id SIMU-1659
+SIMU-1659_performance_remove_unused_filters
+```
+
+## Documentation ##
+
+### Config file
+
+  The config file is a javascript file exporting a config object as default export:
+
+  ```
+  var config = {...}
+  exports.default = config;
+  ```
+
+  #### Config object fields
+
+
+| name     | type          | info                    |
+| -------- | ------------- | ----------------------- |
+| projects | list(project) | list of project objects |
+
+
+  #### Project object fields
+  
+| name         | type                                | info                                        |
+| ------------ | ----------------------------------- | ------------------------------------------- |
+| slug         | string                              | project slug used with the --project option |
+| server       | "clubhouse" \| "jira"               | type of issues tracking server              |
+| serverConfig | object                              | server config object                        |
+| formatter    | (id:string, title:string) => string | an optional branch name formatter           |
+| sanitizer    | (title:string) => string            | an optional issue name sanitizer            |
+| separator    | string                              | an optional word separator (default to "-") |
+
+  #### Server config object fields
+
+  ##### Jira:
+
+| name     | type   | info                     |
+| -------- | ------ | ------------------------ |
+| host     | url    | jira server host         |
+| username | string | jira username            |
+| password | string | jira personal auth token |
+  
+  ##### Clubhouse:
+
+| name      | type   | info                     |
+| --------- | ------ | ------------------------ |
+| authToken | string | jira personal auth token |
+
+
+## Copyright & License
+
+Copyright (c) 2020 Fabrice Armisen.
+
+Distributed under the MIT License (see [LICENSE](./LICENSE)).

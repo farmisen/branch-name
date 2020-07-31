@@ -1,25 +1,58 @@
-[@bs.val] external setTimeout: (unit => unit, int) => unit = "setTimeout";
+open Js.Promise;
+open Belt.Result;
+open Banner;
 
-let clubhouse = (~id, ~config) => {
-  ClubHouse.getStoryName(~id, ~config)
-  |> Js.Promise.then_(name => {
-       let branchName = NameFactory.make(~id, ~name, ~config);
-       Js.log(branchName);
-
-       Js.Promise.resolve();
+let onOk = (~id, ~projectConfig, ~server) => {
+  (
+    switch ((server: Config.server)) {
+    | Clubhouse(authToken) => Clubhouse.getStoryName(~id, ~authToken)
+    | Jira(host, username, password) =>
+      Jira.getStoryName(~id, ~host, ~username, ~password)
+    }
+  )
+  |> then_(maybeName => {
+       switch (maybeName) {
+       | Ok(name) =>
+         let branchName = Name.make(~id, ~name, ~config=projectConfig);
+         Js.log(branchName);
+         resolve(Ok());
+       | Error(message) =>
+         show(Some(message));
+         resolve(Error());
+       }
+     })
+  |> catch(_ => {
+       show(Some("unknown failure"));
+       resolve(Error());
      });
+};
+
+let onError = message => {
+  show(Some(message));
+  resolve(Error());
+};
+
+let onNamebranch = (~id, ~projectConfig) => {
+  switch (Config.server(~projectConfig)) {
+  | Ok(server) => onOk(~id, ~projectConfig, ~server)
+  | Error(message) => onError(message)
+  };
+};
+
+let onHelp = message => {
+  show(message);
+  resolve(Error());
+};
+
+let onDoc = () => {
+  doc();
+  resolve(Ok());
 };
 
 let cli = () => {
   switch (Args.parseArgs()) {
-  | NameBranch(id, projectConfig) =>
-    let server = projectConfig.server;
-    switch (server) {
-    | "jira" => Js.log("NameBranch for jira")
-    | "clubhouse" => ignore(clubhouse(~id, ~config=projectConfig))
-    | _ => failwith(server ++ " not supported.")
-    };
-  | ListProjects => Js.log("ListProjects")
-  | CreateProject => Js.log("CreateProject")
+  | NameBranch(id, projectConfig) => onNamebranch(~id, ~projectConfig)
+  | Help(message) => onHelp(message)
+  | Doc => onDoc()
   };
 };

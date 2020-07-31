@@ -2,31 +2,60 @@
 'use strict';
 
 var Arg = require("arg");
-var Pervasives = require("bs-platform/lib/js/pervasives.js");
+var Belt_Option = require("bs-platform/lib/js/belt_Option.js");
+var Caml_option = require("bs-platform/lib/js/caml_option.js");
 var Config$BranchName = require("./Config.bs.js");
 
 function parseArgs(param) {
   var parameters = ({
     '--id': String,
     '--project': String,
-    '--list': Boolean,
-    '--create': Boolean,
+    '--help': Boolean,
+    '--doc': Boolean,
+    '--config': String,
     '-i': '--id',
-    '-p': '--project'
+    '-p': '--project',
+    '-h': '--help',
+    '-d': '--doc'
 });
-  var result = Arg(parameters);
-  if (result["--list"]) {
-    return /* ListProjects */0;
+  var parsed = Arg(parameters);
+  if (Belt_Option.getWithDefault(parsed["--doc"], false)) {
+    return /* Doc */0;
   }
-  if (result["--create"]) {
-    return /* CreateProject */1;
+  var match = parsed["--id"];
+  var match$1 = parsed["--project"];
+  if (match === undefined) {
+    if (match$1 !== undefined) {
+      return {
+              TAG: /* Help */1,
+              _0: "Missing project"
+            };
+    } else {
+      return {
+              TAG: /* Help */1,
+              _0: undefined
+            };
+    }
   }
-  var config = Config$BranchName.projectConfig(result["--project"]);
-  var projectConfig = config !== undefined ? config : Pervasives.failwith("Error reading the project config");
-  return /* NameBranch */{
-          _0: result["--id"],
-          _1: projectConfig
-        };
+  if (match$1 === undefined) {
+    return {
+            TAG: /* Help */1,
+            _0: "Missing issue id"
+          };
+  }
+  var config = Config$BranchName.projectConfig(Caml_option.valFromOption(match$1), parsed["--config"]);
+  if (config.TAG) {
+    return {
+            TAG: /* Help */1,
+            _0: config._0
+          };
+  } else {
+    return {
+            TAG: /* NameBranch */0,
+            _0: Caml_option.valFromOption(match),
+            _1: config._0
+          };
+  }
 }
 
 exports.parseArgs = parseArgs;

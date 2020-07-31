@@ -1,6 +1,6 @@
 {
   "name": "branch-name",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "sources": [
     {
       "dir": "src",
@@ -17,11 +17,7 @@
   },
   "suffix": ".bs.js",
   "bs-dependencies": [
-    "@glennsl/bs-jest",
-    "@glennsl/bs-json"
-  ],
-  "ppx-flags": [
-    "bs-let/ppx"
+    "@glennsl/bs-jest"
   ],
   "warnings": {
     "error": "+101"
