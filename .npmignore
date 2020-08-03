@@ -1,0 +1,7 @@
+/src/
+/__tests__/
+/lib/
+bsconfig.json
+.npmignore
+.gitignore
+webpack.config.js
