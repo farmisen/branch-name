@@ -1,7 +1,7 @@
 {
   "name": "@farmisen/branch-name",
-  "version": "0.1.5",
-  "repository": "github:armisen/branch-name",
+  "version": "0.1.6",
+  "repository": "github:farmisen/branch-name",
   "author": {
     "name": "Fabrice Armisen",
     "email": "farmisen@gmail.com"
