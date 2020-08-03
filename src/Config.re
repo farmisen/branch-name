@@ -26,11 +26,13 @@ type projectConfig = {
 type config = {projects: list(projectConfig)};
 
 type required;
+[@bs.module "./dynamicRequire"]
+external dynReq: string => required = "default";
 [@bs.val] external require: string => required = "require";
 [@bs.get] external defaultExport: required => config = "default";
 
 let loadModule = path => {
-  require(path) |> defaultExport;
+  dynReq(path) |> defaultExport;
 };
 
 [@bs.get] external projects: config => array(projectConfig) = "projects";

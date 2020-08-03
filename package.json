@@ -1,28 +1,34 @@
 {
   "name": "@farmisen/branch-name",
-  "version": "0.1.2",
+  "version": "0.1.5",
+  "repository": "github:armisen/branch-name",
+  "author": {
+    "name": "Fabrice Armisen",
+    "email": "farmisen@gmail.com"
+  },
+  "keywords": [
+    "jira clubhouse issue branch git"
+  ],
+  "license": "MIT",
+  "bin": {
+    "branch-name": "bin/branch-name"
+  },
+  "dependencies": {
+    "arg": "^4.1.3",
+    "clubhouse-lib": "^0.10.0",
+    "jira-client": "^6.18.0"
+  },
+  "devDependencies": {
+    "@glennsl/bs-jest": "^0.5.1",
+    "bs-platform": "^8.0.3",
+    "webpack": "^4.44.1",
+    "webpack-cli": "^3.3.12",
+    "webpack-node-externals": "^2.5.0"
+  },
   "scripts": {
     "build": "bsb -make-world",
     "start": "bsb -make-world -w",
     "clean": "bsb -clean-world",
     "test": "jest"
-  },
-  "bin": {
-    "branch-name": "bin/branch-name"
-  },
-  "keywords": [
-    "BuckleScript"
-  ],
-  "author": "",
-  "license": "MIT",
-  "devDependencies": {
-    "@glennsl/bs-jest": "^0.5.1",
-    "bs-platform": "^8.0.3"
-  },
-  "dependencies": {
-    "arg": "^4.1.3",
-    "clubhouse-lib": "^0.10.0",
-    "enquirer": "^2.3.6",
-    "jira-client": "^6.18.0"
   }
 }

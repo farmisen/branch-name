@@ -4,14 +4,19 @@
 var List = require("bs-platform/lib/js/list.js");
 var $$Array = require("bs-platform/lib/js/array.js");
 var Belt_Option = require("bs-platform/lib/js/belt_Option.js");
+var DynamicRequire = require("./dynamicRequire");
+
+function dynReq(prim) {
+  return DynamicRequire.default(prim);
+}
 
 function loadModule(path) {
-  return require(path).default;
+  return DynamicRequire.default(path).default;
 }
 
 function projectConfig(projectSlug, configPath) {
   var path = Belt_Option.getWithDefault(configPath, process.env.HOME + "/.branch-name");
-  var config = require(path).default;
+  var config = DynamicRequire.default(path).default;
   var projects = $$Array.to_list(config.projects);
   try {
     return {
@@ -113,7 +118,8 @@ function server(projectConfig) {
   }
 }
 
+exports.dynReq = dynReq;
 exports.loadModule = loadModule;
 exports.projectConfig = projectConfig;
 exports.server = server;
-/* No side effect */
+/* ./dynamicRequire Not a pure module */

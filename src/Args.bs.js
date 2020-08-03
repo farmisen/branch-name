@@ -4,7 +4,7 @@
 var Arg = require("arg");
 var Belt_Option = require("bs-platform/lib/js/belt_Option.js");
 var Caml_option = require("bs-platform/lib/js/caml_option.js");
-var Config$BranchName = require("./Config.bs.js");
+var Config$BfarmisenBranchName = require("./Config.bs.js");
 
 function parseArgs(param) {
   var parameters = ({
@@ -43,7 +43,7 @@ function parseArgs(param) {
             _0: "Missing issue id"
           };
   }
-  var config = Config$BranchName.projectConfig(Caml_option.valFromOption(match$1), parsed["--config"]);
+  var config = Config$BfarmisenBranchName.projectConfig(Caml_option.valFromOption(match$1), parsed["--config"]);
   if (config.TAG) {
     return {
             TAG: /* Help */1,

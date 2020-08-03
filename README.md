@@ -29,8 +29,36 @@ branch-name [options]
 ~/P/f/branch-name > branch-name --project coffee-bot --id 17382 
 farmisen/ch17382/fix-filter-cleanup-cron-table
 
-~/P/f/branch-name > branch-name --project simu- --id SIMU-1659
+~/P/f/branch-name > branch-name --project simu --id SIMU-1659
 SIMU-1659_performance_remove_unused_filters
+
+~/P/f/branch-name > cat ~/.branch-name                                               
+var config = {
+    projects: [
+        {
+            slug: "coffee-bot",
+            server: "clubhouse",
+            serverConfig: {
+                authToken: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+            },
+            
+            formatter: (id, title) => `farmisen/ch${id}/${title}`
+        },
+        {
+            slug: "simu",
+            server: "jira",
+            serverConfig: {
+                host: "xxxxxxxxxxxx.atlassian.net",
+                username: "xxxxxxx@xxxxxxxxxx.xxx",
+                password: "xxxxxxxxxxxxxxxxxxxxxxxx",
+            },
+            formatter: (id, title) => `${id}_${title}`,
+            separator: "_"
+        }
+    ]
+};
+exports.default=config
+
 ```
 
 ## Documentation ##
@@ -48,14 +76,14 @@ SIMU-1659_performance_remove_unused_filters
 
 
 | name     | type          | info                    |
-| -------- | ------------- | ----------------------- |
+|----------|---------------|-------------------------|
 | projects | list(project) | list of project objects |
 
 
   #### Project object fields
   
 | name         | type                                | info                                        |
-| ------------ | ----------------------------------- | ------------------------------------------- |
+|--------------|-------------------------------------|---------------------------------------------|
 | slug         | string                              | project slug used with the --project option |
 | server       | "clubhouse" \| "jira"               | type of issues tracking server              |
 | serverConfig | object                              | server config object                        |
@@ -68,7 +96,7 @@ SIMU-1659_performance_remove_unused_filters
   ##### Jira:
 
 | name     | type   | info                     |
-| -------- | ------ | ------------------------ |
+|----------|--------|--------------------------|
 | host     | url    | jira server host         |
 | username | string | jira username            |
 | password | string | jira personal auth token |
@@ -76,9 +104,18 @@ SIMU-1659_performance_remove_unused_filters
   ##### Clubhouse:
 
 | name      | type   | info                     |
-| --------- | ------ | ------------------------ |
+|-----------|--------|--------------------------|
 | authToken | string | jira personal auth token |
 
+
+## Publishing
+
+```
+$ yarn clean
+$ yarn build
+$ npx webpack
+$ npm publish --access public 
+```
 
 ## Copyright & License
 

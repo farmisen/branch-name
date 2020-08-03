@@ -1,6 +1,6 @@
 {
-  "name": "branch-name",
-  "version": "0.1.1",
+  "name": "b@farmisen/branch-name",
+  "version": "0.1.5",
   "sources": [
     {
       "dir": "src",
