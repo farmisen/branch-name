@@ -53,19 +53,76 @@ function server(projectConfig) {
                   _0: "server config missing authToken value"
                 };
         }
-    case "jira" :
+    case "gitlab" :
         var match$1 = projectConfig.serverConfig;
-        var password = match$1.password;
-        var username = match$1.username;
+        var projectId = match$1.projectId;
+        var token = match$1.token;
         var host = match$1.host;
         if (host !== undefined) {
+          if (token !== undefined) {
+            if (projectId !== undefined) {
+              return {
+                      TAG: /* Ok */0,
+                      _0: {
+                        TAG: /* Gitlab */2,
+                        _0: host,
+                        _1: token,
+                        _2: projectId
+                      }
+                    };
+            } else {
+              return {
+                      TAG: /* Error */1,
+                      _0: "server config missing projectId value"
+                    };
+            }
+          } else if (projectId !== undefined) {
+            return {
+                    TAG: /* Error */1,
+                    _0: "server config missing token value"
+                  };
+          } else {
+            return {
+                    TAG: /* Error */1,
+                    _0: "server config missing token and projectId values"
+                  };
+          }
+        } else if (token !== undefined) {
+          if (projectId !== undefined) {
+            return {
+                    TAG: /* Error */1,
+                    _0: "server config missing host value"
+                  };
+          } else {
+            return {
+                    TAG: /* Error */1,
+                    _0: "server config missing host and projectId values"
+                  };
+          }
+        } else if (projectId !== undefined) {
+          return {
+                  TAG: /* Error */1,
+                  _0: "server config missing host and projectId values"
+                };
+        } else {
+          return {
+                  TAG: /* Error */1,
+                  _0: "server config missing host, token and projectId values"
+                };
+        }
+    case "jira" :
+        var match$2 = projectConfig.serverConfig;
+        var password = match$2.password;
+        var username = match$2.username;
+        var host$1 = match$2.host;
+        if (host$1 !== undefined) {
           if (username !== undefined) {
             if (password !== undefined) {
               return {
                       TAG: /* Ok */0,
                       _0: {
                         TAG: /* Jira */1,
-                        _0: host,
+                        _0: host$1,
                         _1: username,
                         _2: password
                       }

@@ -2,8 +2,9 @@
 open Belt.Result;
 
 type server =
-  | Clubhouse(string) // authtoken
-  | Jira(string, string, string);
+  | Clubhouse(string) // token
+  | Jira(string, string, string) // host, username, token
+  | Gitlab(string, string, string); // host, token, project id
 
 type serverConfig = {
   // jira
@@ -12,6 +13,9 @@ type serverConfig = {
   password: option(string),
   // clubhouse
   authToken: option(string),
+  // gitlab
+  token: option(string),
+  projectId: option(string),
 };
 
 type projectConfig = {
@@ -73,5 +77,23 @@ let server = (~projectConfig: projectConfig) =>
     | Some(authToken) => Ok(Clubhouse(authToken))
     | None => Error("server config missing authToken value")
     }
+  | "gitlab" =>
+    let {serverConfig: {host, token, projectId}} = projectConfig;
+    switch (host, token, projectId) {
+    | (Some(host), Some(token), Some(projectId)) =>
+      Ok(Gitlab(host, token, projectId))
+    | (Some(_), Some(_), None) =>
+      Error("server config missing projectId value")
+    | (Some(_), None, Some(_)) => Error("server config missing token value")
+    | (Some(_), None, None) =>
+      Error("server config missing token and projectId values")
+    | (None, Some(_), Some(_)) => Error("server config missing host value")
+    | (None, Some(_), None) =>
+      Error("server config missing host and projectId values")
+    | (None, None, Some(_)) =>
+      Error("server config missing host and projectId values")
+    | (None, None, None) =>
+      Error("server config missing host, token and projectId values")
+    };
   | _ => Error("unsupported server type")
   };

@@ -8,6 +8,8 @@ let onOk = (~id, ~projectConfig, ~server) => {
     | Clubhouse(authToken) => Clubhouse.getStoryName(~id, ~authToken)
     | Jira(host, username, password) =>
       Jira.getStoryName(~id, ~host, ~username, ~password)
+    | Gitlab(host, token, projectId) =>
+      Gitlab.getStoryName(~id, ~host, ~token, ~projectId)
     }
   )
   |> then_(maybeName => {

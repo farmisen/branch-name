@@ -1,3 +1,11 @@
+.DS_Store
+.merlin
+.bsb.lock
+npm-debug.log
+/lib/bs/
+/node_modules/
+.history/
+/bin/branch-name-dev
 /src/
 /__tests__/
 /lib/

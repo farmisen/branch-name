@@ -1,6 +1,6 @@
 # branch-name
 
-A cli tool to generate well formatted pr names from your favorite issue trackers. So far Jira and Clubhouse are supported.
+A cli tool to generate well formatted pr names from your favorite issue trackers. So far Jira, Clubhouse and Gitlab are supported.
 
 
 ## Installation ##
@@ -32,6 +32,10 @@ farmisen/ch17382/fix-filter-cleanup-cron-table
 ~/P/f/branch-name > branch-name --project simu --id SIMU-1659
 SIMU-1659_performance_remove_unused_filters
 
+~/P/f/branch-name > --project clemet --id 80
+clem_80-retire_the_log_drawer
+
+
 ~/P/f/branch-name > cat ~/.branch-name                                               
 var config = {
     projects: [
@@ -53,6 +57,17 @@ var config = {
                 password: "xxxxxxxxxxxxxxxxxxxxxxxx",
             },
             formatter: (id, title) => `${id}_${title}`,
+            separator: "_"
+        },
+        {
+            slug: "clemet",
+            server: "gitlab",
+            serverConfig: {
+                host: "xxxxxxxxxxxx.xxxxxxxxx.xxx",
+                token: "xxxxxxxxxxxxxxxxxxxxxxxx",
+                projectId: 5,
+            },
+            formatter: (id, title) => `clem_${id}-${title}`,
             separator: "_"
         }
     ]
@@ -85,7 +100,7 @@ exports.default=config
 | name         | type                                | info                                        |
 |--------------|-------------------------------------|---------------------------------------------|
 | slug         | string                              | project slug used with the --project option |
-| server       | "clubhouse" \| "jira"               | type of issues tracking server              |
+| server       | "clubhouse" \| "jira \| gitlab"     | type of issues tracking server              |
 | serverConfig | object                              | server config object                        |
 | formatter    | (id:string, title:string) => string | an optional branch name formatter           |
 | sanitizer    | (title:string) => string            | an optional issue name sanitizer            |
@@ -106,6 +121,13 @@ exports.default=config
 | name      | type   | info                     |
 |-----------|--------|--------------------------|
 | authToken | string | jira personal auth token |
+
+##### Gitlab:
+
+| name  | type   | info                       |
+|-------|--------|----------------------------|
+| host  | url    | gitlab server host         |
+| token | string | gitlab personal auth token |
 
 
 ## Publishing

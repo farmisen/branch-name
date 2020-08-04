@@ -46,7 +46,7 @@ let doc = () => {
 
   {
     slug: string,                                       project slug
-    server: "clubhouse" | "jira",                       type of server,
+    server: "clubhouse" | "jira" | "gitlab",            type of server,
     serverConfig: object,                               server config object
     formatter: (id:string, title:string) => string,     an optional branch name formatter
     sanitizer: (title:string) => string,                an optional issue name sanitizer
@@ -69,6 +69,16 @@ let doc = () => {
 
   {
     authToken: string,                                  clubhouse personal auth token
+  }
+
+
+  Gitlab:
+
+  {
+    host: url,                                          gitlab server host
+    token: string,                                      gitlab personal auth token
+    projectId: num,                                     project id
+
   }
 
     |},
