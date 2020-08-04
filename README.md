@@ -1,6 +1,6 @@
 # branch-name
 
-A cli tool to generate well formatted pr name from your favorite issue trackers. So far Jira and Clubhouse are supported.
+A cli tool to generate well formatted pr names from your favorite issue trackers. So far Jira and Clubhouse are supported.
 
 
 ## Installation ##
