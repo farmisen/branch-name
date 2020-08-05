@@ -38,35 +38,35 @@ function server(projectConfig) {
   var match = projectConfig.server;
   switch (match) {
     case "clubhouse" :
-        var authToken = projectConfig.serverConfig.authToken;
-        if (authToken !== undefined) {
+        var token = projectConfig.serverConfig.token;
+        if (token !== undefined) {
           return {
                   TAG: /* Ok */0,
                   _0: {
                     TAG: /* Clubhouse */0,
-                    _0: authToken
+                    _0: token
                   }
                 };
         } else {
           return {
                   TAG: /* Error */1,
-                  _0: "server config missing authToken value"
+                  _0: "server config missing token value"
                 };
         }
     case "gitlab" :
         var match$1 = projectConfig.serverConfig;
         var projectId = match$1.projectId;
-        var token = match$1.token;
+        var token$1 = match$1.token;
         var host = match$1.host;
         if (host !== undefined) {
-          if (token !== undefined) {
+          if (token$1 !== undefined) {
             if (projectId !== undefined) {
               return {
                       TAG: /* Ok */0,
                       _0: {
                         TAG: /* Gitlab */2,
                         _0: host,
-                        _1: token,
+                        _1: token$1,
                         _2: projectId
                       }
                     };
@@ -87,7 +87,7 @@ function server(projectConfig) {
                     _0: "server config missing token and projectId values"
                   };
           }
-        } else if (token !== undefined) {
+        } else if (token$1 !== undefined) {
           if (projectId !== undefined) {
             return {
                     TAG: /* Error */1,
@@ -112,28 +112,28 @@ function server(projectConfig) {
         }
     case "jira" :
         var match$2 = projectConfig.serverConfig;
-        var password = match$2.password;
+        var token$2 = match$2.token;
         var username = match$2.username;
         var host$1 = match$2.host;
         if (host$1 !== undefined) {
           if (username !== undefined) {
-            if (password !== undefined) {
+            if (token$2 !== undefined) {
               return {
                       TAG: /* Ok */0,
                       _0: {
                         TAG: /* Jira */1,
                         _0: host$1,
                         _1: username,
-                        _2: password
+                        _2: token$2
                       }
                     };
             } else {
               return {
                       TAG: /* Error */1,
-                      _0: "server config missing password value"
+                      _0: "server config missing token value"
                     };
             }
-          } else if (password !== undefined) {
+          } else if (token$2 !== undefined) {
             return {
                     TAG: /* Error */1,
                     _0: "server config missing username value"
@@ -141,11 +141,11 @@ function server(projectConfig) {
           } else {
             return {
                     TAG: /* Error */1,
-                    _0: "server config missing username and password values"
+                    _0: "server config missing username and token values"
                   };
           }
         } else if (username !== undefined) {
-          if (password !== undefined) {
+          if (token$2 !== undefined) {
             return {
                     TAG: /* Error */1,
                     _0: "server config missing host value"
@@ -153,18 +153,18 @@ function server(projectConfig) {
           } else {
             return {
                     TAG: /* Error */1,
-                    _0: "server config missing host and password values"
+                    _0: "server config missing host and token values"
                   };
           }
-        } else if (password !== undefined) {
+        } else if (token$2 !== undefined) {
           return {
                   TAG: /* Error */1,
-                  _0: "server config missing host and password values"
+                  _0: "server config missing host and token values"
                 };
         } else {
           return {
                   TAG: /* Error */1,
-                  _0: "server config missing host, username and password values"
+                  _0: "server config missing host, username and token values"
                 };
         }
     default:

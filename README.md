@@ -43,7 +43,7 @@ var config = {
             slug: "coffee-bot",
             server: "clubhouse",
             serverConfig: {
-                authToken: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
+                token: "xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx",
             },
             
             formatter: (id, title) => `farmisen/ch${id}/${title}`
@@ -54,7 +54,7 @@ var config = {
             serverConfig: {
                 host: "xxxxxxxxxxxx.atlassian.net",
                 username: "xxxxxxx@xxxxxxxxxx.xxx",
-                password: "xxxxxxxxxxxxxxxxxxxxxxxx",
+                token: "xxxxxxxxxxxxxxxxxxxxxxxx",
             },
             formatter: (id, title) => `${id}_${title}`,
             separator: "_"
@@ -114,13 +114,13 @@ exports.default=config
 |----------|--------|--------------------------|
 | host     | url    | jira server host         |
 | username | string | jira username            |
-| password | string | jira personal auth token |
+| token    | string | jira personal auth token |
   
   ##### Clubhouse:
 
-| name      | type   | info                     |
-|-----------|--------|--------------------------|
-| authToken | string | jira personal auth token |
+| name  | type   | info                          |
+|-------|--------|-------------------------------|
+| token | string | clubhouse personal auth token |
 
 ##### Gitlab:
 

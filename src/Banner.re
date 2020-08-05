@@ -62,13 +62,13 @@ let doc = () => {
   {
     host: url,                                          jira server host
     username: string,                                   jira username
-    password: string,                                   jira personal auth token
+    token: string,                                      jira personal auth token
   }
 
   Clubhouse:
 
   {
-    authToken: string,                                  clubhouse personal auth token
+    token: string,                                      clubhouse personal auth token
   }
 
 

@@ -7,15 +7,10 @@ type server =
   | Gitlab(string, string, string); // host, token, project id
 
 type serverConfig = {
-  // jira
-  host: option(string),
-  username: option(string),
-  password: option(string),
-  // clubhouse
-  authToken: option(string),
-  // gitlab
-  token: option(string),
-  projectId: option(string),
+  host: option(string), // gitlab, jira
+  username: option(string), // jira
+  token: option(string), // gitlab, clubhouse, jira
+  projectId: option(string) // gitlab
 };
 
 type projectConfig = {
@@ -54,28 +49,27 @@ let projectConfig = (~projectSlug: string, ~configPath: option(string)) => {
 let server = (~projectConfig: projectConfig) =>
   switch (projectConfig.server) {
   | "jira" =>
-    let {serverConfig: {host, username, password}} = projectConfig;
-    switch (host, username, password) {
-    | (Some(host), Some(username), Some(password)) =>
-      Ok(Jira(host, username, password))
-    | (Some(_), Some(_), None) =>
-      Error("server config missing password value")
+    let {serverConfig: {host, username, token}} = projectConfig;
+    switch (host, username, token) {
+    | (Some(host), Some(username), Some(token)) =>
+      Ok(Jira(host, username, token))
+    | (Some(_), Some(_), None) => Error("server config missing token value")
     | (Some(_), None, Some(_)) =>
       Error("server config missing username value")
     | (Some(_), None, None) =>
-      Error("server config missing username and password values")
+      Error("server config missing username and token values")
     | (None, Some(_), Some(_)) => Error("server config missing host value")
     | (None, Some(_), None) =>
-      Error("server config missing host and password values")
+      Error("server config missing host and token values")
     | (None, None, Some(_)) =>
-      Error("server config missing host and password values")
+      Error("server config missing host and token values")
     | (None, None, None) =>
-      Error("server config missing host, username and password values")
+      Error("server config missing host, username and token values")
     };
   | "clubhouse" =>
-    switch (projectConfig.serverConfig.authToken) {
-    | Some(authToken) => Ok(Clubhouse(authToken))
-    | None => Error("server config missing authToken value")
+    switch (projectConfig.serverConfig.token) {
+    | Some(token) => Ok(Clubhouse(token))
+    | None => Error("server config missing token value")
     }
   | "gitlab" =>
     let {serverConfig: {host, token, projectId}} = projectConfig;
